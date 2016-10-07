@@ -60,6 +60,7 @@ public class PreferencesWindow extends JDialog {
     private void onOK() {
         // add your code here
         preferences.put("masterServer", masterAddr.getText());
+
         dispose();
     }
 

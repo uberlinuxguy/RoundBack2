@@ -23,6 +23,7 @@ public class MainWindow extends JFrame {
     private Preferences preferences;
     private PreferencesWindow preferencesWindow;
     private boolean isConnected;
+    JMenuItem connItem;
 
 
     public MainWindow() {
@@ -95,6 +96,13 @@ public class MainWindow extends JFrame {
 
                     dialog.pack();
                     dialog.setVisible(true);
+                    // reload all the prefs
+                    loadAndCheckPrefs();
+                    if(isConnected){
+                        clientNetwork.disconnect();
+                        isConnected=false;
+                        connItem.setText("Connect");
+                    }
                 }
             });
             fileMenu.add(prefsItem);
@@ -106,7 +114,7 @@ public class MainWindow extends JFrame {
                 connectedMenu="Connect";
 
             }
-            JMenuItem connItem = new JMenuItem(connectedMenu);
+            connItem = new JMenuItem(connectedMenu);
             connItem.setAccelerator(KeyStroke.getKeyStroke("c"));
             connItem.addActionListener(new ActionListener() {
                 @Override
@@ -156,4 +164,9 @@ public class MainWindow extends JFrame {
 
     }
 
+    @Override
+    public void paint(Graphics g) {
+
+        super.paint(g);
+    }
 }
