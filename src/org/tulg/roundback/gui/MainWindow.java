@@ -4,11 +4,13 @@ import org.tulg.roundback.client.ClientNetwork;
 
 import javax.swing.*;
 import javax.swing.text.Position;
+import javax.swing.text.html.HTMLDocument;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Iterator;
 import java.util.prefs.Preferences;
 
 /**
@@ -24,14 +26,13 @@ public class MainWindow extends JFrame {
     private PreferencesWindow preferencesWindow;
     private boolean isConnected;
     JMenuItem connItem;
+    DefaultMutableTreeNode top;
 
 
     public MainWindow() {
         isConnected = false;
 
-        //setBounds(-1, -1, 300, 200);
-        DefaultMutableTreeNode top =
-                new DefaultMutableTreeNode("...");
+        top = new DefaultMutableTreeNode("...");
         DefaultTreeModel model = (DefaultTreeModel) tree1.getModel();
         /*
         top.add(new DefaultMutableTreeNode("Test 1"));
@@ -51,6 +52,9 @@ public class MainWindow extends JFrame {
 
         // TODO: Attempt to connect to the master server.
         isConnected = clientNetwork.connect();
+        if(isConnected){
+            loadHosts(top);
+        }
 
 
         model.setRoot(top);
@@ -74,6 +78,20 @@ public class MainWindow extends JFrame {
         });
 
 
+    }
+
+    private void loadHosts(DefaultMutableTreeNode top) {
+        DefaultMutableTreeNode hostsCategory = new DefaultMutableTreeNode("Backed Up Hosts");
+        HostTreeNode tmpNode;
+        Iterator hostIterator = clientNetwork.getHosts().iterator();
+        while(hostIterator.hasNext()){
+            String hostname = (String)hostIterator.next();
+            String[] parts = hostname.split(" ");
+
+            tmpNode = new HostTreeNode(parts[2], parts[1]);
+            hostsCategory.add(tmpNode);
+        }
+        top.add(hostsCategory);
     }
 
     public Preferences getPreferences() {
@@ -126,6 +144,7 @@ public class MainWindow extends JFrame {
                         connItem.setText("Connect");
                     } else {
                         clientNetwork.connect();
+                        loadHosts(top);
                         isConnected=true;
                         connItem.setText("Disconnect");
                     }
