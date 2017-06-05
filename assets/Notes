@@ -1,0 +1,44 @@
+Storage Server Parameters:
+- Master Server
+- Starting data port
+- Ending Data Port
+- Client Time out
+
+
+Client Config Parameters:
+- Master Server
+
+
+Master Server Parameters:
+- port
+
+
+backups table:
+- uuid - unique identifier for the backup in question
+- status - enum
+    - 0 - Pending
+    - 1 - Started
+    - 2 - Running
+    - 3 - Completed, Success
+    - 4 - Completed, Error
+- start_time - int
+- end_time - int
+- hid - int - host id.
+
+storageServers table:
+- uuid - unique identifier for the server.
+- ip
+- port
+- type - type of storage the server supports, ie. tape, tar, files, etc.
+- enabled
+- online
+- hbTime - last hb time received.
+
+files table:
+- id - unique auto incrementing
+- mod time
+- crc
+- parentId - for directories, sets the file's parent relationship.
+- type - file, directory, symlink, etc.
+- sServerId - storage Server ID, relates to storageServers table.
+- sServerLocation - Location on the storage server

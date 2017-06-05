@@ -1,5 +1,7 @@
 package org.tulg.roundback.master;
 
+import org.tulg.roundback.core.NetIOHandler;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,10 +13,11 @@ import java.util.concurrent.Executors;
 /**
  * Created by jasonw on 10/7/2016.
  */
-public class MasterNetwork {
-    ServerSocket socket;
-    int port;
-    private boolean quitting;
+class MasterNetwork {
+    private ServerSocket socket;
+    private int port;
+    private final boolean quitting;
+    private final MasterConfig masterConfig;
 
     public MasterNetwork(MasterConfig config){
         port=2377;
@@ -25,24 +28,34 @@ public class MasterNetwork {
         }
         quitting=false;
 
+        masterConfig = config;
+
     }
 
     public void listen(){
         try {
+            // create a new socket
             socket = new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Error: Unable to create socket on port " + port);
             System.exit(1);
         }
-        //handleConnection(socket);
-        Socket clientSock = null;
+
+        // Start listening.
+        Socket clientSock;
+        System.out.println("Server Started on port: " + port);
         while(!quitting) {
             try {
                 clientSock = socket.accept();
 
-                ExecutorService executor = Executors.newFixedThreadPool(5);
-                Runnable clientThread = new MasterThread(clientSock);
+                // Someone connected, start a thread to handle the connection
+                ExecutorService executor = Executors.newFixedThreadPool(5); // TODO: this probably goes outside the loop
+
+                // Set up the thread.
+                MasterThread clientThread = new MasterThread(clientSock);
+                clientThread.setMasterConfig(masterConfig);
+
                 executor.execute(clientThread);
                 System.out.println("Accepted connection: " +
                         clientSock.getInetAddress().getHostAddress() + ":" +
@@ -55,42 +68,5 @@ public class MasterNetwork {
                 System.exit(1);
             }
         }
-
-        /*
-        Socket clientSock = null;
-        BufferedReader in = null;
-        String inputLine = "";
-        // listen until we quit
-        while(!quitting) {
-            try {
-                clientSock = socket.accept();
-                in = new BufferedReader(
-                        new InputStreamReader(clientSock.getInputStream()));
-                 inputLine = in.readLine();
-                while (inputLine != "bye") {
-                    inputLine = in.readLine();
-                }
-                if(inputLine.equals("bye")) {
-                    quitting = true;
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.err.println("Error: socket error on accept()");
-                System.exit(1);
-            }
-            System.out.println("Accepted connection: " +
-                    clientSock.getInetAddress().getHostAddress() + ":" +
-                    clientSock.getPort()
-            );
-            try {
-                clientSock.close();
-            } catch (IOException e) {
-
-            }
-
-
-        }*/
-
     }
 }

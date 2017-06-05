@@ -1,13 +1,13 @@
-package org.tulg.roundback.gui;
+package org.tulg.roundback.rbadmin;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  * Created by jasonw on 10/9/2016.
  */
-public class HostTreeNode extends DefaultMutableTreeNode {
+class HostTreeNode extends DefaultMutableTreeNode {
 
-    int hid;
+    private int hid;
     public HostTreeNode(Object userObject) {
         super(userObject);
     }
@@ -16,4 +16,7 @@ public class HostTreeNode extends DefaultMutableTreeNode {
         this.hid = Integer.parseInt(hid);
     }
 
+    public int getHid() {
+        return hid;
+    }
 }
