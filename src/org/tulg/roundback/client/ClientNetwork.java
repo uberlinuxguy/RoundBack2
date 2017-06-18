@@ -76,7 +76,8 @@ public class ClientNetwork {
     }
 
     public String recvRaw() throws IOException, InterruptedException {
-        // wait for reply...
+
+        /*// wait for reply...
         int timer=0;
         while(!netIOHandler.inReady()){
                 Thread.sleep(1000);
@@ -87,9 +88,11 @@ public class ClientNetwork {
 
         }
         if(netIOHandler.inReady()) {
+        */
             return netIOHandler.readLine();
-        }
-        return "";
+        //}
+
+        //return "";
     }
 
     public ArrayList<String> getHosts(){
