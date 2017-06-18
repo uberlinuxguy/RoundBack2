@@ -50,10 +50,28 @@ class StorageCommandLine {
             storageConfig.setMinDataPort(Integer.valueOf(commandLine.getOptionValue("minDataPort")));
         }
 
+        if(commandLine.hasOption("UseEncryption")){
+            if(commandLine.getOptionValue("UseEncryption").compareToIgnoreCase("y") == 0 ){
+                storageConfig.setEncrypted(true);
+            } else {
+                if (commandLine.getOptionValue("UseEncryption").compareToIgnoreCase("n") == 0) {
+                    storageConfig.setEncrypted(false);
+                } else {
+                    System.err.println("Error: Unrecognized argument to 'UseEncryption'");
+                }
+            }
+        }
+
+        if(commandLine.hasOption("EncryptionKey")){
+            storageConfig.setEncryptionKey(commandLine.getOptionValue("EncryptionKey"));
+        }
+
         // XXX: This check should be at the end of this function.
         if(commandLine.hasOption("save")) {
                 storageConfig.save();
         }
+
+
 
     }
 
@@ -72,24 +90,6 @@ class StorageCommandLine {
                 .required(false)
                 .type(Integer.class)
                 .desc("Port to listen on")
-                .build();
-        options.addOption(tmpOpt);
-
-        tmpOpt = Option.builder("s")
-                .longOpt("save")
-                .numberOfArgs(0)
-                .required(false)
-                .type(boolean.class)
-                .desc("Save settings to persistent after parsing commandline.")
-                .build();
-        options.addOption(tmpOpt);
-
-        tmpOpt = Option.builder("h")
-                .longOpt("help")
-                .numberOfArgs(0)
-                .required(false)
-                .type(boolean.class)
-                .desc("Print this help page.")
                 .build();
         options.addOption(tmpOpt);
 
@@ -120,9 +120,45 @@ class StorageCommandLine {
                 .build();
         options.addOption(tmpOpt);
 
+        tmpOpt = Option.builder("e")
+                .longOpt("UseEncryption")
+                .numberOfArgs(1)
+                .required(false)
+                .type(boolean.class)
+                .desc("Should we use encryption")
+                .build();
+        options.addOption(tmpOpt);
+
+        tmpOpt = Option.builder("k")
+                .longOpt("EncryptionKey")
+                .numberOfArgs(1)
+                .required(false)
+                .type(String.class)
+                .desc("Key for Encryption")
+                .build();
+        options.addOption(tmpOpt);
+
 
         // XXX: Add new option blocks here.
 
+
+        tmpOpt = Option.builder("s")
+                .longOpt("save")
+                .numberOfArgs(0)
+                .required(false)
+                .type(boolean.class)
+                .desc("Save settings to persistent after parsing commandline.")
+                .build();
+        options.addOption(tmpOpt);
+
+        tmpOpt = Option.builder("h")
+                .longOpt("help")
+                .numberOfArgs(0)
+                .required(false)
+                .type(boolean.class)
+                .desc("Print this help page.")
+                .build();
+        options.addOption(tmpOpt);
 
 
     }
