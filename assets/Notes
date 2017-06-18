@@ -42,3 +42,9 @@ files table:
 - type - file, directory, symlink, etc.
 - sServerId - storage Server ID, relates to storageServers table.
 - sServerLocation - Location on the storage server
+
+
+TODO: Correct key storage for encryption.  Should this be part of user input at startup? Perhaps it must be supplied on the commandline?
+TODO: Figure out backup initialization.  Protocol.txt has some information, but how to set up the communication to the storage machine?
+TODO: Initial storage backend. rbimg files? Format? Data Storage? Encryption?
+TODO: Logging for all programs.
