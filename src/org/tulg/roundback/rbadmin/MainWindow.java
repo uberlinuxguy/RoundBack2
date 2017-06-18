@@ -62,10 +62,10 @@ class MainWindow extends JFrame implements MouseListener {
         preferencesWindow = new PreferencesWindow(this);
 
 
-        // TODO: load preferences.
+        // load preferences.
         loadAndCheckPrefs();
 
-        // TODO: Attempt to connect to the master server.
+        // Attempt to connect to the master server.
         isConnected = clientNetwork.connect();
         if(isConnected){
             try {
@@ -156,7 +156,7 @@ class MainWindow extends JFrame implements MouseListener {
             connItem = new JMenuItem(connectedMenu);
             connItem.setAccelerator(KeyStroke.getKeyStroke("c"));
             connItem.addActionListener(e -> {
-                // TODO: Disconnect or connect.
+                // Disconnect or connect.
                 if(isConnected) {
                     clientNetwork.disconnect();
                     isConnected=false;
