@@ -19,6 +19,11 @@ class MasterProtocol {
 
     private final MasterDB db;
     private NetIOHandler netIOHandler = null;
+    private boolean adminSession = false;
+    private long adminSessionStart = 0;
+    private int adminSessionLength = 60; // TODO: make this a configurable.
+    private MasterConfig masterConfig;
+
 
     public MasterProtocol (NetIOHandler netIOHandler){
 
@@ -57,6 +62,8 @@ class MasterProtocol {
                 return processTestCommand(parser, db);
             case "register":
                 return processRegisterCommand(parser, db);
+            case "auth":
+                return proecessAuthCommand(parser, db);
             // XXX: Add new commands here.
             default:
                 netIOHandler.println("ERR: Unsupported Command");
@@ -65,7 +72,55 @@ class MasterProtocol {
         return true;
     }
 
+    private boolean proecessAuthCommand(StringTokenizer parser, MasterDB db) throws IOException {
+        if(!parser.hasMoreTokens()){
+            netIOHandler.println("Err: Missing Required Argument");
+            closeConnection(db);
+            return true;
+
+        }
+        String subCommand = parser.nextToken();
+        switch (subCommand.toLowerCase()) {
+            case "check":
+                if (isAdminSession()) {
+                    netIOHandler.println("TRUE");
+                } else {
+                    netIOHandler.println("FALSE");
+                }
+                return true;
+            case "password":
+                if(!parser.hasMoreTokens()){
+                    netIOHandler.println("Err: Missing Required Arguement");
+                    closeConnection(db);
+                    return true;
+                }
+                String passwordIn = parser.nextToken();
+                if(!authenticateAdmin(passwordIn)){
+                    netIOHandler.println("Err: Invalid login");
+
+                } else {
+                    netIOHandler.println("OK");
+
+                }
+                closeConnection(db);
+                return true;
+
+            default:
+                netIOHandler.println("Err: Unrecognized Sub Command.");
+
+        }
+
+        return true;
+
+
+    }
+
     private boolean processRegisterCommand(StringTokenizer parser, MasterDB db) throws IOException {
+        if(!isAdminSession()) {
+            netIOHandler.println("NOAUTH: Err: Authentication Required");
+            closeConnection(db);
+            return true;
+        }
         if(!parser.hasMoreTokens()) {
             netIOHandler.println("Err: Missing Required argument");
             closeConnection(db);
@@ -82,9 +137,11 @@ class MasterProtocol {
         switch (subCommand.toLowerCase()) {
             case "server":
                 // server should always be a storage server
+                netIOHandler.println("TODO: register remote as server");
                 break;
             case "client":
                 // register a client
+                netIOHandler.println("TODO: register remote as client");
                 break;
             default:
                 netIOHandler.println("Err: Unknown register type.");
@@ -283,5 +340,41 @@ class MasterProtocol {
         db.close();
     }
 
+    public boolean authenticateAdmin(String password) {
 
+        // TODO: For now, admin pass can be the same as encryption key.
+        String key = masterConfig.getEncryptionKey();
+        if(password.equals(key)) {
+            adminSessionStart = System.currentTimeMillis() / 1000L;
+            adminSession = true;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isAdminSession () {
+        // Check to see if this connection has admin rights.
+        // First check if admin session is true.
+        if(adminSession) {
+            //  check that adminSessionStart + adminSessionLength < now()
+            if(adminSessionStart + adminSessionLength < System.currentTimeMillis() / 1000L ){
+                adminSessionStart = 0;
+                adminSession = false;
+                return false;
+
+            } else {
+                // everything looks ok, so we have an admin session
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public MasterConfig getMasterConfig() {
+        return masterConfig;
+    }
+
+    public void setMasterConfig(MasterConfig masterConfig) {
+        this.masterConfig = masterConfig;
+    }
 }

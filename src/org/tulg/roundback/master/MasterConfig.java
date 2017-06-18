@@ -54,9 +54,12 @@ class MasterConfig {
 
     public void setEncryptionKey(String encryptionKey) {
         // only var that is synced to disk when set.
-        // might need to make sure we find a way to
+        //  might need to make sure we find a way to
         // only push the key directly disk when needed without caching it in
         // a var in RAM.
+        // TODO: Need to find a better way to store the key, or take it in from the user at start up and keep a hashed verion in memory.
+        // TODO: Update Encrypter.java and all other *Config.java files.  Perhaps
+        // TODO: Merge all *Config.java files to one main Config.java class.
         preferences.put("EncryptionKey", encryptionKey);
     }
 

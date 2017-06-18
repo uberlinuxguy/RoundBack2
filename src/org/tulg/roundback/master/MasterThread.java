@@ -1,5 +1,6 @@
 package org.tulg.roundback.master;
 
+import org.tulg.roundback.core.Encrypter;
 import org.tulg.roundback.core.NetIOHandler;
 
 import java.io.*;
@@ -15,20 +16,23 @@ class MasterThread implements Runnable {
     private NetIOHandler netIOHandler = null;
     private MasterConfig masterConfig = null;
 
-
     public MasterThread(Socket clientSock){
         this.clientSock = clientSock;
         quitting = false;
         netIOHandler = new NetIOHandler();
         mProto = new MasterProtocol(netIOHandler);
+
     }
 
     public void setClientSock(Socket clientSock) {
         this.clientSock = clientSock;
     }
 
+
     public void setMasterConfig(MasterConfig masterConfig) {
         this.masterConfig = masterConfig;
+        mProto.setMasterConfig(masterConfig);
+
     }
 
     @Override
