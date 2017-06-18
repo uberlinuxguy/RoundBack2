@@ -96,13 +96,16 @@ public class NetIOHandler {
                     System.err.println("Error: encryptionKey not set but encryption requested.");
                     System.err.println("Error: network reads will fail!");
                 } else {
-                    return Encrypter.decrypt(encryptionKey, in.readLine());
+                    String inLine = in.readLine();
+                    if(inLine == null)
+                        return null;
+                    return Encrypter.decrypt(encryptionKey, inLine);
                 }
             } else {
                 return in.readLine();
             }
         } catch (IOException e) {
-            System.err.println("Error: Error reading input stream. Empty string returned.");
+            //System.err.println("Error: Error reading input stream. Empty string returned.");
             throw new IOException("Input Stream Disconnected");
         }
         return "";
@@ -115,6 +118,7 @@ public class NetIOHandler {
     public boolean inReady() throws IOException {
         return in.ready();
     }
+
 
     public void close() {
         out.close();

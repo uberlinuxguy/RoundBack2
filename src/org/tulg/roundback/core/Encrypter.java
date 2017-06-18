@@ -43,11 +43,6 @@ public class Encrypter {
             // do the encryption
             byte[] encrypted = cipher.doFinal(value.getBytes());
 
-            //TODO: remove.
-            System.out.println("encrypted string: "
-                    + Base64.getEncoder().encodeToString(encrypted));
-            System.out.println("iv: "
-                    + Base64.getEncoder().encodeToString(initVector));
 
 
             // add the IV to the beginning of the encrypted string.
