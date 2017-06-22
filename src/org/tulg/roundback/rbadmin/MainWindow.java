@@ -8,11 +8,9 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.prefs.Preferences;
 
 /**

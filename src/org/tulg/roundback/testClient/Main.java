@@ -10,7 +10,7 @@ class Main {
         TestCliConfig testCliConfig = new TestCliConfig();
         //TestCliCommandLine testCliCommandLine = new TestCliCommandLine(args, testCliConfig);
 
-        ConnectDiaglog dialog = new ConnectDiaglog(testCliConfig);
+        ConnectDialog dialog = new ConnectDialog(testCliConfig);
         dialog.pack();
         dialog.setVisible(true);
 

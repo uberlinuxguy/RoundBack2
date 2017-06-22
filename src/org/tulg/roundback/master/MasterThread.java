@@ -1,6 +1,5 @@
 package org.tulg.roundback.master;
 
-import org.tulg.roundback.core.Encrypter;
 import org.tulg.roundback.core.NetIOHandler;
 
 import java.io.*;

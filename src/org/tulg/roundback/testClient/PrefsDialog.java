@@ -1,10 +1,8 @@
 package org.tulg.roundback.testClient;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.*;
-import java.util.StringTokenizer;
 
 class PrefsDialog extends JDialog {
     private JPanel contentPane;

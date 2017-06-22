@@ -1,7 +1,5 @@
 package org.tulg.roundback.core;
 
-import sun.plugin2.message.JVMStartedMessage;
-
 /**
  * Created by jasonw on 4/24/2017.
  */

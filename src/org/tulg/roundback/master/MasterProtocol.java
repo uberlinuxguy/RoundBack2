@@ -5,7 +5,6 @@ import org.tulg.roundback.core.Encrypter;
 import org.tulg.roundback.core.NetIOHandler;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.sql.*;
 import java.util.*;
 
@@ -21,7 +20,6 @@ class MasterProtocol {
     private NetIOHandler netIOHandler = null;
     private boolean adminSession = false;
     private long adminSessionStart = 0;
-    private int adminSessionLength = 60; // TODO: make this a configurable.
     private MasterConfig masterConfig;
 
 
@@ -357,6 +355,7 @@ class MasterProtocol {
         // First check if admin session is true.
         if(adminSession) {
             //  check that adminSessionStart + adminSessionLength < now()
+            int adminSessionLength = 60;
             if(adminSessionStart + adminSessionLength < System.currentTimeMillis() / 1000L ){
                 adminSessionStart = 0;
                 adminSession = false;

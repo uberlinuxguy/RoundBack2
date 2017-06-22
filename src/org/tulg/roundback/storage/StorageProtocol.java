@@ -2,7 +2,6 @@ package org.tulg.roundback.storage;
 
 import org.tulg.roundback.core.NetIOHandler;
 
-import javax.swing.text.BadLocationException;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
@@ -14,7 +13,6 @@ class StorageProtocol {
     private NetIOHandler netIOHandler = null;
     private boolean adminSession = false;
     private long adminSessionStart = 0;
-    private int adminSessionLength = 60; // TODO: make this a configurable.
     private StorageConfig storageConfig;
 
 
@@ -174,6 +172,7 @@ class StorageProtocol {
         // First check if admin session is true.
         if(adminSession) {
             //  check that adminSessionStart + adminSessionLength < now()
+            int adminSessionLength = 60;
             if(adminSessionStart + adminSessionLength < System.currentTimeMillis() / 1000L ){
                 adminSessionStart = 0;
                 adminSession = false;

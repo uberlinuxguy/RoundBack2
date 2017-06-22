@@ -23,7 +23,6 @@ public class FileTransfer extends JDialog {
     private JTextField txtCommand;
     private JButton btnSend;
     private JButton btnConnect;
-    private ConnectDialog connectDialog;
     private Thread recvThread;
     private boolean connected;
     private ClientNetwork clientNetwork;
@@ -72,17 +71,9 @@ public class FileTransfer extends JDialog {
 
         resetThread();
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
+        buttonOK.addActionListener(e -> onOK());
 
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
+        buttonCancel.addActionListener(e -> onCancel());
 
 
 
@@ -100,11 +91,7 @@ public class FileTransfer extends JDialog {
 
 
         // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
     private void onSend() {
@@ -159,7 +146,7 @@ public class FileTransfer extends JDialog {
 
 
     public void setConnectDialog(ConnectDialog connectDialog) {
-        this.connectDialog = connectDialog;
+        ConnectDialog connectDialog1 = connectDialog;
     }
 
 
