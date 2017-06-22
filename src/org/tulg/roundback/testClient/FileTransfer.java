@@ -23,7 +23,7 @@ public class FileTransfer extends JDialog {
     private JTextField txtCommand;
     private JButton btnSend;
     private JButton btnConnect;
-    private ConnectDiaglog connectDiaglog;
+    private ConnectDialog connectDialog;
     private Thread recvThread;
     private boolean connected;
     private ClientNetwork clientNetwork;
@@ -35,6 +35,21 @@ public class FileTransfer extends JDialog {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
+        addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                //super.windowClosing(e);
+                if(connected) {
+                    if(clientNetwork != null) {
+                        clientNetwork.disconnect();
+                    }
+                    connected=false;
+                    btnConnect.setText("Connect");
+                    recvThread.interrupt();
+                }
+            }
+        });
 
         btnBrowse.setMnemonic('b');
         buttonOK.setMnemonic('o');
@@ -141,8 +156,10 @@ public class FileTransfer extends JDialog {
         dispose();
     }
 
-    public void setConnectDiaglog(ConnectDiaglog connectDiaglog) {
-        this.connectDiaglog = connectDiaglog;
+
+
+    public void setConnectDialog(ConnectDialog connectDialog) {
+        this.connectDialog = connectDialog;
     }
 
 
@@ -178,7 +195,7 @@ public class FileTransfer extends JDialog {
                     }
                 }
             }
-            System.out.println("Recieve thread exit.");
+            System.out.println("Storage receive thread exit.");
             resetThread();
         });
     }
