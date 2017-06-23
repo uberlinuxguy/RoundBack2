@@ -6,7 +6,14 @@ import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.attribute.AclEntry;
+import java.nio.file.attribute.AclEntryPermission;
+import java.nio.file.attribute.AclFileAttributeView;
+import java.util.*;
 
 public class FileTransfer extends JDialog {
     private final TestCliConfig testCliConfig;
@@ -101,10 +108,32 @@ public class FileTransfer extends JDialog {
         int retval = fc.showOpenDialog(this);
         if(retval == JFileChooser.APPROVE_OPTION) {
             // user selected a file
-            String filename = fc.getSelectedFile().getAbsolutePath();
+            File chosenFile = fc.getSelectedFile();
+            String filename = chosenFile.getAbsolutePath();
             txtTarget.setText(filename);
             int len = filename.length();
+            getFilePerms();
         }
+    }
+
+    private void getFilePerms() {
+        AclFileAttributeView aclView = Files.getFileAttributeView(Paths.get(txtTarget.getText()), AclFileAttributeView.class);
+        try {
+            java.util.List<AclEntry> aclEntryList = aclView.getAcl();
+            for(AclEntry entry : aclEntryList) {
+                System.out.format("Principal: %s%n", entry.principal());
+                System.out.format("Type: %s%n", entry.type());
+                System.out.format("Permissions:%n");
+                Set<AclEntryPermission> permissions = entry.permissions();
+                for (AclEntryPermission p : permissions) {
+                    System.out.format("%s %n", p);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private void onSend() {
