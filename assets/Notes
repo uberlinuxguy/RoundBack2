@@ -48,3 +48,9 @@ TODO: Correct key storage for encryption.  Should this be part of user input at 
 TODO: Figure out backup initialization.  Protocol.txt has some information, but how to set up the communication to the storage machine?
 TODO: Initial storage backend. rbimg files? Format? Data Storage? Encryption?
 TODO: Logging for all programs.
+TODO: Storage Server Threading? And how that relates to storage backend? Perhaps:
+TODO:   one rbimg file per thread?
+TODO:   Threads are persistent.
+TODO: Client "round robins" threads for sending files/dirs.
+
+TODO: Solid permissions, acls, attributes handing.  This could be difficult cross platform.

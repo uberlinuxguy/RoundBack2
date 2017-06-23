@@ -49,10 +49,13 @@ class ConnectDialog extends JDialog {
                         clientNetwork.disconnect();
                     //clientNetwork = null;
                     recvThread.interrupt();
-                    ((TestClientFrame)getParent()).dispose();
-                    System.exit(0);
+
 
                 }
+
+                ((TestClientFrame)getParent()).dispose();
+                System.exit(0);
+
             }
         });
 

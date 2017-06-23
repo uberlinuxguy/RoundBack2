@@ -33,7 +33,7 @@ public class FileTransfer extends JDialog {
     public FileTransfer(TestCliConfig testCliConfig) {
         setContentPane(contentPane);
         setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
+        getRootPane().setDefaultButton(btnSend);
         addWindowListener(new WindowAdapter() {
 
             @Override
@@ -74,6 +74,7 @@ public class FileTransfer extends JDialog {
         buttonOK.addActionListener(e -> onOK());
 
         buttonCancel.addActionListener(e -> onCancel());
+        btnBrowse.addActionListener(e -> onBrowse());
 
 
 
@@ -92,6 +93,18 @@ public class FileTransfer extends JDialog {
 
         // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+    }
+
+    private void onBrowse() {
+        final JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        int retval = fc.showOpenDialog(this);
+        if(retval == JFileChooser.APPROVE_OPTION) {
+            // user selected a file
+            String filename = fc.getSelectedFile().getAbsolutePath();
+            txtTarget.setText(filename);
+            int len = filename.length();
+        }
     }
 
     private void onSend() {
